@@ -53,7 +53,7 @@ def name_the_file(wallpaper):
 
 # Find the wallpaper links and download them.
 home_directory = os.path.expanduser("~")
-destination = os.path.join(home_directory, "Pictures", "Wallhaven")
+destination = os.path.join(home_directory, "Pictures", "Temp_Wallhaven")
 try:
     os.makedirs(destination)
 except OSError:
@@ -67,7 +67,13 @@ for wallpaper in wall_json["data"]:
         for chunk in img.iter_content(100000):
             img_file.write(chunk)
 
-# Open the wallhaven folder for user to select the desired image.
+def open_file_explorer():
+    if plat.startswith("win"):
+        os.startfile(destination)
+    if plat.startswith("linux"):
+        subprocess.run(["path", destination])
+
+# Create and open the temp_wallhaven folder for user to select the desired image.
 print("Please select your fav among them.")
 time.sleep(2)
 print("Then, click and drag the image file to this window.")
@@ -77,10 +83,6 @@ for i in range(3):
     time.sleep(1)
     print(".", end="", flush=True)
 print()
+open_file_explorer()
 
 
-def open_file_explorer():
-    if plat.startswith("win"):
-        os.startfile(destination)
-    if plat.startswith("linux"):
-        subprocess.run(["path", destination])
