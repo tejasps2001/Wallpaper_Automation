@@ -53,6 +53,7 @@ def name_the_file(wallpaper):
 
 
 # Find the wallpaper links and download them.
+print('Downloading images...')
 home_directory = os.path.expanduser("~")
 destination = os.path.join(home_directory, "Pictures", "Temp_Wallhaven")
 try:
@@ -79,11 +80,7 @@ print("Please select your fav among them.")
 time.sleep(2)
 print("Then, click and drag the image file to this window.")
 time.sleep(3)
-print("Opening images folder", end="")
-for i in range(3):
-    time.sleep(1)
-    print(".", end="", flush=True)
-print()
+print("Opening images folder...")
 open_file_explorer()
 
 while True:
