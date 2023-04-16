@@ -2,9 +2,11 @@
 #! /usr/bin/env python3
 
 import os
+import sys
 import time
 import json
 import requests
+import subprocess
 
 import tkinter as tk
 
@@ -65,4 +67,18 @@ print('Please select your fav among them.')
 time.sleep(2)
 print('Then, click and drag the image file to this window.')
 time.sleep(3)
-print("Opening images folder")
+print("Opening images folder", end='')
+for i in range(3):
+    time.sleep(1)
+    print('.', end='', flush=True)
+print()
+
+plat = sys.platform
+def open_file_explorer():
+    if plat.startswith('win'):
+        os.startfile(destination)
+    elif plat.startswith('linux'):
+        subprocess.run(['path', destination])
+    else:
+        print('Unsupported operating system')
+
