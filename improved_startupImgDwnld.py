@@ -11,8 +11,8 @@ import subprocess
 import tkinter as tk
 
 plat = sys.platform
-if not plat.startswith('win') or plat.startswith('linux'):
-    print('Unsupported operating system')
+if not plat.startswith("win") or plat.startswith("linux"):
+    print("Unsupported operating system")
     sys.exit(1)
 
 # Get the user's screen ratio.
@@ -68,19 +68,19 @@ for wallpaper in wall_json["data"]:
             img_file.write(chunk)
 
 # Open the wallhaven folder for user to select the desired image.
-print('Please select your fav among them.')
+print("Please select your fav among them.")
 time.sleep(2)
-print('Then, click and drag the image file to this window.')
+print("Then, click and drag the image file to this window.")
 time.sleep(3)
-print("Opening images folder", end='')
+print("Opening images folder", end="")
 for i in range(3):
     time.sleep(1)
-    print('.', end='', flush=True)
+    print(".", end="", flush=True)
 print()
 
-def open_file_explorer():
-    if plat.startswith('win'):
-        os.startfile(destination)
-    if plat.startswith('linux'):
-        subprocess.run(['path', destination])
 
+def open_file_explorer():
+    if plat.startswith("win"):
+        os.startfile(destination)
+    if plat.startswith("linux"):
+        subprocess.run(["path", destination])
