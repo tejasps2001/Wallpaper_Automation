@@ -64,7 +64,7 @@ wall_json = json.loads(result.text)
 for wallpaper in wall_json["data"]:
     wall_name = name_the_file(wallpaper)
     img = requests.get(wallpaper["path"])
-    with open(wall_name, "wb") as img_file:
+    with open(os.path.join(destination, wall_name), "wb") as img_file:
         for chunk in img.iter_content(100000):
             img_file.write(chunk)
 
