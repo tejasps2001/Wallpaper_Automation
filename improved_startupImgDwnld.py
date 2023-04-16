@@ -5,13 +5,14 @@ import os
 import sys
 import time
 import json
+import shutil
 import requests
 import subprocess
 
 import tkinter as tk
 
 plat = sys.platform
-if not plat.startswith("win") or plat.startswith("linux"):
+if not plat.startswith("win") and not plat.startswith("linux"):
     print("Unsupported operating system")
     sys.exit(1)
 
@@ -85,4 +86,19 @@ for i in range(3):
 print()
 open_file_explorer()
 
+while True:
+    fav_image = input('Click and drag the image file here: ')
+    if not os.path.exists(fav_image):
+        print('Invalid file path. Try again')
+    break
 
+# Send the image to the Wallhaven folder.
+target = os.path.join(home_directory, "Pictures", "Wallhaven")
+try:
+    os.makedirs(target)
+except OSError:
+    pass
+
+move_output = shutil.mv(destination, target)
+
+print('Moved \033[35m' + os.path.basename(fav_image) + '\033[39m to \033[33m' + move_output + '\033[39m.')
