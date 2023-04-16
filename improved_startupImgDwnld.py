@@ -10,6 +10,11 @@ import subprocess
 
 import tkinter as tk
 
+plat = sys.platform
+if not plat.startswith('win') or plat.startswith('linux'):
+    print('Unsupported operating system')
+    sys.exit(1)
+
 # Get the user's screen ratio.
 screen_ratios = {
     1.25: "5x4",
@@ -73,12 +78,9 @@ for i in range(3):
     print('.', end='', flush=True)
 print()
 
-plat = sys.platform
 def open_file_explorer():
     if plat.startswith('win'):
         os.startfile(destination)
-    elif plat.startswith('linux'):
+    if plat.startswith('linux'):
         subprocess.run(['path', destination])
-    else:
-        print('Unsupported operating system')
 
