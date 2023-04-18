@@ -31,7 +31,6 @@ screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 screen_ratio_decimal = round(screen_width / screen_height, 2)
 screen_ratio = screen_ratios[screen_ratio_decimal]
-root.destroy()
 
 # Download webpage result data.
 url = (
@@ -53,7 +52,7 @@ def name_the_file(wallpaper):
 
 
 # Find the wallpaper links and download them.
-print('Downloading images...')
+print("Downloading images...")
 home_directory = os.path.expanduser("~")
 destination = os.path.join(home_directory, "Pictures", "Temp_Wallhaven")
 try:
@@ -64,24 +63,27 @@ wallpapers_path = destination
 wall_json = json.loads(result.text)
 progress_bar = 0
 # Hide cursor in output.
-print('\033[?25l', end="")
+print("\033[?25l", end="")
 for wallpaper in wall_json["data"]:
     progress_bar += 4
-    print(f'\r{progress_bar}%', end='')
+    print(f"\r{progress_bar}%", end="")
     wall_name = name_the_file(wallpaper)
     img = requests.get(wallpaper["path"])
     with open(os.path.join(destination, wall_name), "wb") as img_file:
         for chunk in img.iter_content(100000):
             img_file.write(chunk)
-print('\r100%')
+print("\r100%")
+time.sleep(1)
 # Show cursor.
-print('\033[?25l', end="")
+print("\033[?25h", end="")
+
 
 def open_file_explorer():
     if plat.startswith("win"):
         os.startfile(destination)
     if plat.startswith("linux"):
         subprocess.run(["xdg-open", destination])
+
 
 # Create and open the temp_wallhaven folder for user to select the desired image.
 print("Please select your fav among them.")
@@ -92,10 +94,17 @@ print("Opening images folder...")
 open_file_explorer()
 
 while True:
-    fav_image = input('Click and drag the image file here: ')
-    if not os.path.exists(fav_image):
-        print('Invalid file path. Try again')
-    break
+    fav_image = input("Click and drag the image file here and press enter: ")
+    if os.path.exists(fav_image):
+        print("Invalid file path. Try again")
+    else:
+        break
+
+# The input() function in the while loop tries to access a 
+# destroyed tkinter event loop, resulting in an error. To 
+# prevent this error, the tkinter object is destroyed 
+# after the input() function call.
+root.destroy()
 
 # Send the image to the Wallhaven folder.
 target = os.path.join(home_directory, "Pictures", "Wallhaven")
@@ -104,7 +113,13 @@ try:
 except OSError:
     pass
 
-move_output = shutil.mv(destination, target)
+move_output = shutil.move(destination, target)
 
-print('Moved \033[35m' + os.path.basename(fav_image) + '\033[39m to \033[33m' + move_output + '\033[39m.')
-print('Done!')
+print(
+    "Moved \033[35m"
+    + os.path.basename(fav_image)
+    + "\033[39m to \033[33m"
+    + move_output
+    + "\033[39m."
+)
+print("Done!")
