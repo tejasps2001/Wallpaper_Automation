@@ -13,7 +13,7 @@ import tkinter as tk
 
 plat = sys.platform
 if not plat.startswith("win") and not plat.startswith("linux"):
-    print("Unsupported operating system")
+    print("Unsupported operating system.")
     sys.exit(1)
 
 # Get the user's screen ratio.
@@ -62,18 +62,26 @@ except OSError:
     pass
 wallpapers_path = destination
 wall_json = json.loads(result.text)
+progress_bar = 0
+# Hide cursor in output.
+print('\033[?25l', end="")
 for wallpaper in wall_json["data"]:
+    progress_bar += 4
+    print(f'\r{progress_bar}%', end='')
     wall_name = name_the_file(wallpaper)
     img = requests.get(wallpaper["path"])
     with open(os.path.join(destination, wall_name), "wb") as img_file:
         for chunk in img.iter_content(100000):
             img_file.write(chunk)
+print('\r100%')
+# Show cursor.
+print('\033[?25l', end="")
 
 def open_file_explorer():
     if plat.startswith("win"):
         os.startfile(destination)
     if plat.startswith("linux"):
-        subprocess.run(["path", destination])
+        subprocess.run(["xdg-open", destination])
 
 # Create and open the temp_wallhaven folder for user to select the desired image.
 print("Please select your fav among them.")
@@ -99,3 +107,4 @@ except OSError:
 move_output = shutil.mv(destination, target)
 
 print('Moved \033[35m' + os.path.basename(fav_image) + '\033[39m to \033[33m' + move_output + '\033[39m.')
+print('Done!')
